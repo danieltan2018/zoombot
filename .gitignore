@@ -1,0 +1,7 @@
+*.pyc
+.DS_Store
+*.key
+*.pem
+secrets.py
+*.txt
+*.json
