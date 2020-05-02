@@ -67,18 +67,25 @@ def zoom():
         elif event == 'meeting.participant_left':
             if roomtype > 0:
                 logline += ',Left Meeting,{},{}'.format(name, userid)
-                participants.remove(userid)
+                try:
+                    participants.remove(userid)
+                except:
+                    pass
             else:
                 logline += ',Exit Breakout Room,{},{}'.format(name, userid)
-                breakout.remove(userid)
+                try:
+                    breakout.remove(userid)
+                except:
+                    pass
         with open('log.txt', 'a+') as log:
             log.write(logline + '\n')
         msg = '<b>Life YF Zoom</b>\n<i>Meeting Link:</i> {}\n<i>Password:</i> {}\n\n<u>Current Participants</u>\n'.format(
             meetinglink, meetingpw)
         count = 1
         for userid in participants:
-            msg += str(count) + '. ' + users[userid] + '\n'
-            count += 1
+            if userid not in breakout:
+                msg += str(count) + '. ' + users[userid] + '\n'
+                count += 1
         for userid in breakout:
             msg += str(count) + '. ' + users[userid] + ' (Breakout Room)\n'
             count += 1
