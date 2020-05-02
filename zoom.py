@@ -90,13 +90,16 @@ def zoom():
             msg += str(count) + '. ' + users[userid] + ' (Breakout Room)\n'
             count += 1
         msg += '\nLast updated: {}'.format(current_time)
-        bot.edit_message_text(
-            chat_id=group,
-            message_id=1571,
-            text=msg,
-            parse_mode=telegram.ParseMode.HTML,
-            disable_web_page_preview=True
-        )
+        try:
+            bot.edit_message_text(
+                chat_id=group,
+                message_id=1571,
+                text=msg,
+                parse_mode=telegram.ParseMode.HTML,
+                disable_web_page_preview=True
+            )
+        except:
+            pass
         return '{"success":"true"}', 200
 
 
@@ -119,13 +122,16 @@ def zoom2():
             msg += str(count) + ') ' + user + '\n'
             count += 1
         msg = msg.strip()
-        tulbot.edit_message_text(
-            chat_id=group2,
-            message_id=411,
-            text=msg,
-            parse_mode=telegram.ParseMode.HTML,
-            disable_web_page_preview=True
-        )
+        try:
+            tulbot.edit_message_text(
+                chat_id=group2,
+                message_id=411,
+                text=msg,
+                parse_mode=telegram.ParseMode.HTML,
+                disable_web_page_preview=True
+            )
+        except:
+            pass
         with open('tullog.txt', 'a+') as tullog:
             tullog.write(logline + '\n')
         return '{"success":"true"}', 200
