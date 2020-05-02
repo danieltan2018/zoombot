@@ -54,13 +54,15 @@ def zoom():
                 if num == 1:
                     msg = '<b>Life YF Zoom: </b><i>{}</i> is in the house. <a href="{}">Click here</a> to join!'.format(
                         name, pinnedmsg)
-                    bot.send_message(
-                        chat_id=group, text=msg, parse_mode=telegram.ParseMode.HTML, disable_web_page_preview=True)
+                    try:
+                        bot.send_message(
+                            chat_id=group, text=msg, parse_mode=telegram.ParseMode.HTML, disable_web_page_preview=True)
+                    except:
+                        pass
                 elif num % 5 == 0:
                     msg = '<b>Life YF Zoom: </b>{} people are here. <a href="{}">Click here</a> to join!'.format(
                         num, pinnedmsg)
-                    bot.send_message(
-                        chat_id=group, text=msg, parse_mode=telegram.ParseMode.HTML, disable_web_page_preview=True)
+                    # bot.send_message(chat_id=group, text=msg, parse_mode=telegram.ParseMode.HTML, disable_web_page_preview=True)
             else:
                 logline += ',Enter Breakout Room,{},{}'.format(name, userid)
                 breakout.add(userid)
