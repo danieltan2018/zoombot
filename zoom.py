@@ -34,8 +34,6 @@ def zoom():
             userid = x['payload']['object']['participant']['user_id']
         name = x['payload']['object']['participant']['user_name']
         roomtype = x['payload']['object']['type']
-        if name == 'Life YF':
-            return '{"success":"true"}', 200
         global users
         if userid not in users:
             users[userid] = name
@@ -46,6 +44,8 @@ def zoom():
         now = datetime.now()
         current_time = now.strftime("%d/%m/%Y %H:%M:%S")
         logline = current_time
+        if name == 'Life YF':
+            return '{"success":"true"}', 200
         if event == 'meeting.participant_joined':
             if roomtype > 0:
                 logline += ',Joined Meeting,{},{}'.format(name, userid)
