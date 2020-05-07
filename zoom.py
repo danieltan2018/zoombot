@@ -34,6 +34,11 @@ def zoom():
             userid = x['payload']['object']['participant']['user_id']
         name = x['payload']['object']['participant']['user_name']
         roomtype = x['payload']['object']['type']
+        host_id = x['payload']['object']['host_id']
+        try:
+            timestamp = userid = x['payload']['object']['participant']['join_time']
+        except:
+            timestamp = userid = x['payload']['object']['participant']['leave_time']
         global users
         if userid not in users:
             users[userid] = name
@@ -43,12 +48,18 @@ def zoom():
             name = users[userid]
         now = datetime.now()
         current_time = now.strftime("%d/%m/%Y %H:%M:%S")
-        logline = current_time
+        try:
+            logline = timestamp
+        except:
+            logline = current_time
         if name == 'Life YF':
             return '{"success":"true"}', 200
         if event == 'meeting.participant_joined':
             if roomtype > 0:
-                logline += ',Joined Meeting,{},{}'.format(name, userid)
+                logline += ',Joined Meeting,{},{},{}'.format(
+                    name, userid, host_id)
+                if host_id != 'OsaME2VKSpyEh6dQhVjLmw':
+                    return '{"success":"true"}', 200
                 participants.add(userid)
                 num = len(participants)
                 if num == 1:
@@ -69,7 +80,10 @@ def zoom():
                 breakout.add(userid)
         elif event == 'meeting.participant_left':
             if roomtype > 0:
-                logline += ',Left Meeting,{},{}'.format(name, userid)
+                logline += ',Left Meeting,{},{},{}'.format(
+                    name, userid, host_id)
+                if host_id != 'OsaME2VKSpyEh6dQhVjLmw':
+                    return '{"success":"true"}', 200
                 try:
                     participants.remove(userid)
                 except:
