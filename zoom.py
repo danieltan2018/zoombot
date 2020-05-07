@@ -36,9 +36,9 @@ def zoom():
         roomtype = x['payload']['object']['type']
         host_id = x['payload']['object']['host_id']
         try:
-            timestamp = userid = x['payload']['object']['participant']['join_time']
+            timestamp = x['payload']['object']['participant']['join_time']
         except:
-            timestamp = userid = x['payload']['object']['participant']['leave_time']
+            timestamp = x['payload']['object']['participant']['leave_time']
         global users
         if userid not in users:
             users[userid] = name
