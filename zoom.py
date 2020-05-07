@@ -2,7 +2,7 @@ from flask import Flask, request
 import json
 import telegram
 from datetime import datetime
-from secrets import route, bottoken, group, meetinglink, meetingpw, pinnedmsg, route2, bottoken2, group2, meetinglink2
+from secrets import route, bottoken, group, meetinglink, pinnedmsg, route2, bottoken2, group2, meetinglink2
 
 bot = telegram.Bot(token=bottoken)
 tulbot = telegram.Bot(token=bottoken2)
@@ -96,8 +96,8 @@ def zoom():
                     pass
         with open('log.txt', 'a+') as log:
             log.write(logline + '\n')
-        msg = '<b>Life YF Zoom</b>\n<i>Meeting Link:</i> {}\n<i>Password:</i> {}\n\n<u>Current Participants</u>\n'.format(
-            meetinglink, meetingpw)
+        msg = '<b>Life YF Zoom</b>\n<i>Meeting Link:</i> {}\n\n<u>Current Participants</u>\n'.format(
+            meetinglink)
         count = 1
         for userid in participants:
             if userid not in breakout:
