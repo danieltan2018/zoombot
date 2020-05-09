@@ -16,9 +16,9 @@ except:
     with open('users.json', 'w+') as userfile:
         users = {}
 
-participants = set()
-breakout = set()
-tulparticipants = set()
+participants = []
+breakout = []
+tulparticipants = []
 
 
 @app.route(route, methods=['POST'])
@@ -60,7 +60,7 @@ def zoom():
                     name, userid, host_id)
                 if host_id != 'OsaME2VKSpyEh6dQhVjLmw':
                     return '{"success":"true"}', 200
-                participants.add(userid)
+                participants.append(userid)
                 num = len(participants)
                 if num == 1:
                     msg = '<b>Life YF Zoom: </b><i>{}</i> is in the house. <a href="{}">Click here</a> to join!'.format(
@@ -77,7 +77,7 @@ def zoom():
                         chat_id=group, text=msg, parse_mode=telegram.ParseMode.HTML, disable_web_page_preview=True)
             else:
                 logline += ',Enter Breakout Room,{},{}'.format(name, userid)
-                breakout.add(userid)
+                breakout.append(userid)
         elif event == 'meeting.participant_left':
             if roomtype > 0:
                 logline += ',Left Meeting,{},{},{}'.format(
@@ -127,7 +127,7 @@ def zoom2():
         event = x['event']
         name = x['payload']['object']['participant']['user_name']
         if event == 'meeting.participant_joined':
-            tulparticipants.add(name)
+            tulparticipants.append(name)
             logline = '{} joined'.format(name)
         elif event == 'meeting.participant_left':
             tulparticipants.remove(name)
