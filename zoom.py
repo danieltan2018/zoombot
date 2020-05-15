@@ -59,6 +59,8 @@ def zoom():
                 logline += ',Joined Meeting,{},{},{}'.format(
                     name, userid, host_id)
                 if host_id != 'OsaME2VKSpyEh6dQhVjLmw':
+                    with open('log.txt', 'a+') as log:
+                        log.write(logline + '\n')
                     return '{"success":"true"}', 200
                 participants.append(userid)
                 num = len(participants)
@@ -78,6 +80,8 @@ def zoom():
                 logline += ',Left Meeting,{},{},{}'.format(
                     name, userid, host_id)
                 if host_id != 'OsaME2VKSpyEh6dQhVjLmw':
+                    with open('log.txt', 'a+') as log:
+                        log.write(logline + '\n')
                     return '{"success":"true"}', 200
                 try:
                     participants.remove(userid)
