@@ -2,10 +2,9 @@ from flask import Flask, request
 import json
 import telegram
 from datetime import datetime
-from secrets import route, bottoken, group, meetinglink, pinnedmsg, route2, bottoken2, group2, meetinglink2
+from secrets import route, bottoken, group, meetinglink, pinnedmsg
 
 bot = telegram.Bot(token=bottoken)
-tulbot = telegram.Bot(token=bottoken2)
 
 app = Flask(__name__)
 
@@ -18,7 +17,6 @@ except:
 
 participants = []
 breakout = []
-tulparticipants = []
 
 
 @app.route(route, methods=['POST'])
@@ -44,8 +42,6 @@ def zoom():
             users[userid] = name
             with open('users.json', 'w') as userfile:
                 json.dump(users, userfile)
-        else:
-            name = users[userid]
         now = datetime.now()
         current_time = now.strftime("%d/%m/%Y %H:%M:%S")
         try:
@@ -59,7 +55,7 @@ def zoom():
                 logline += ',Joined Meeting,{},{},{}'.format(
                     name, userid, host_id)
                 if host_id != 'OsaME2VKSpyEh6dQhVjLmw':
-                    with open('log.txt', 'a+') as log:
+                    with open('otherlog.txt', 'a+') as log:
                         log.write(logline + '\n')
                     return '{"success":"true"}', 200
                 participants.append(userid)
@@ -80,7 +76,7 @@ def zoom():
                 logline += ',Left Meeting,{},{},{}'.format(
                     name, userid, host_id)
                 if host_id != 'OsaME2VKSpyEh6dQhVjLmw':
-                    with open('log.txt', 'a+') as log:
+                    with open('otherlog.txt', 'a+') as log:
                         log.write(logline + '\n')
                     return '{"success":"true"}', 200
                 try:
@@ -93,7 +89,7 @@ def zoom():
                     breakout.remove(userid)
                 except:
                     pass
-        with open('log.txt', 'a+') as log:
+        with open('yflog.txt', 'a+') as log:
             log.write(logline + '\n')
         msg = '<b>Life YF Zoom</b>\n<i>Meeting Link:</i> {}\n\n<u>Current Participants</u>\n'.format(
             meetinglink)
@@ -116,40 +112,6 @@ def zoom():
             )
         except:
             pass
-        return '{"success":"true"}', 200
-
-
-@app.route(route2, methods=['POST'])
-def zoom2():
-    if request.method == 'POST':
-        x = request.json
-        event = x['event']
-        name = x['payload']['object']['participant']['user_name']
-        if event == 'meeting.participant_joined':
-            tulparticipants.append(name)
-            logline = '{} joined'.format(name)
-        elif event == 'meeting.participant_left':
-            tulparticipants.remove(name)
-            logline = '{} left'.format(name)
-        msg = "<b>Tullie's CB zoomzoomz</b>\n\n<i>Join Zoom Meeting</i>\n{}\n\n<u>Current Participants</u>\n".format(
-            meetinglink2)
-        count = 1
-        for user in tulparticipants:
-            msg += str(count) + ') ' + user + '\n'
-            count += 1
-        msg = msg.strip()
-        try:
-            tulbot.edit_message_text(
-                chat_id=group2,
-                message_id=411,
-                text=msg,
-                parse_mode=telegram.ParseMode.HTML,
-                disable_web_page_preview=True
-            )
-        except:
-            pass
-        with open('tullog.txt', 'a+') as tullog:
-            tullog.write(logline + '\n')
         return '{"success":"true"}', 200
 
 
