@@ -30,10 +30,19 @@ def zoom():
                 raise ValueError
         except:
             userid = x['payload']['object']['participant']['user_id']
-        name = x['payload']['object']['participant']['user_name']
+        try:
+            name = x['payload']['object']['participant']['user_name']
+        except:
+            name = 'No Name'
         roomtype = x['payload']['object']['type']
-        topic = x['payload']['object']['topic']
-        host_id = x['payload']['object']['host_id']
+        try:
+            topic = x['payload']['object']['topic']
+        except:
+            topic = 'No Topic'
+        try:
+            host_id = x['payload']['object']['host_id']
+        except:
+            host_id = 'No Host'
         try:
             timestamp = x['payload']['object']['participant']['join_time']
         except:
