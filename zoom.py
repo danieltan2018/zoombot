@@ -32,6 +32,7 @@ def zoom():
             userid = x['payload']['object']['participant']['user_id']
         name = x['payload']['object']['participant']['user_name']
         roomtype = x['payload']['object']['type']
+        topic = x['payload']['object']['topic']
         host_id = x['payload']['object']['host_id']
         try:
             timestamp = x['payload']['object']['participant']['join_time']
@@ -52,13 +53,13 @@ def zoom():
             return '{"success":"true"}', 200
         if event == 'meeting.participant_joined':
             if roomtype > 0:
-                logline += ',Joined Meeting,{},{},{}'.format(
-                    name, userid, host_id)
+                logline += ',Joined Meeting,{},{}'.format(name, topic)
                 if host_id != 'OsaME2VKSpyEh6dQhVjLmw':
                     with open('otherlog.txt', 'a+') as log:
                         log.write(logline + '\n')
                     return '{"success":"true"}', 200
                 participants.append(userid)
+                '''
                 num = len(participants)
                 if num == 1:
                     msg = '<b>Life YF Zoom: </b><i>{}</i> is in the house. <a href="{}">Click here</a> to join!'.format(
@@ -68,13 +69,13 @@ def zoom():
                             chat_id=group, text=msg, parse_mode=telegram.ParseMode.HTML, disable_web_page_preview=True)
                     except:
                         pass
+                '''
             else:
-                logline += ',Enter Breakout Room,{},{}'.format(name, userid)
+                logline += ',Enter Breakout Room,{}'.format(name)
                 breakout.append(userid)
         elif event == 'meeting.participant_left':
             if roomtype > 0:
-                logline += ',Left Meeting,{},{},{}'.format(
-                    name, userid, host_id)
+                logline += ',Left Meeting,{},{}'.format(name, topic)
                 if host_id != 'OsaME2VKSpyEh6dQhVjLmw':
                     with open('otherlog.txt', 'a+') as log:
                         log.write(logline + '\n')
@@ -84,7 +85,7 @@ def zoom():
                 except:
                     pass
             else:
-                logline += ',Exit Breakout Room,{},{}'.format(name, userid)
+                logline += ',Exit Breakout Room,{}'.format(name)
                 try:
                     breakout.remove(userid)
                 except:
@@ -98,9 +99,8 @@ def zoom():
             if userid not in breakout:
                 msg += str(count) + '. ' + users[userid] + '\n'
                 count += 1
-        for userid in breakout:
-            msg += str(count) + '. ' + users[userid] + ' (Breakout Room)\n'
-            count += 1
+        inbreakout = str(len(breakout))
+        msg += '{} in Breakout Rooms\n'.format(inbreakout)
         msg += '\nLast updated: {}'.format(current_time)
         try:
             bot.edit_message_text(
