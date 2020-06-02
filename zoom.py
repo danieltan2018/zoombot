@@ -108,9 +108,9 @@ def zoom():
             if userid not in breakout:
                 msg += str(count) + '. ' + users[userid] + '\n'
                 count += 1
-        inbreakout = str(len(breakout))
+        inbreakout = len(breakout)
         if inbreakout > 0:
-            msg += '({} in Breakout Rooms)\n'.format(inbreakout)
+            msg += '({} in Breakout Rooms)\n'.format(str(inbreakout))
         msg += '\nLast updated: {}'.format(current_time)
         try:
             bot.edit_message_text(
