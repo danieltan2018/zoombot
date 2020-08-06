@@ -133,7 +133,8 @@ def clearmem():
     participants = []
     global breakout
     breakout = []
-    msg = '<b>Life YF Zoom</b>\n<i>Meeting Link:</i> {}\n\nNo Participants'
+    msg = '<b>Life YF Zoom</b>\n<i>Meeting Link:</i> {}\n\n<u>Current Participants</u>\n'.format(
+        meetinglink)
     try:
         bot.edit_message_text(
             chat_id=group,
