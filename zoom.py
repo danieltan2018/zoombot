@@ -3,6 +3,9 @@ import json
 import telegram
 from datetime import datetime
 from secrets import route, bottoken, group, meetinglink, pinnedmsg
+import threading
+import time
+import schedule
 
 bot = telegram.Bot(token=bottoken)
 
@@ -125,5 +128,34 @@ def zoom():
         return '{"success":"true"}', 200
 
 
+def clearmem():
+    global participants
+    participants = []
+    global breakout
+    breakout = []
+    msg = '<b>Life YF Zoom</b>\n<i>Meeting Link:</i> {}\n\nNo Participants'
+    try:
+        bot.edit_message_text(
+            chat_id=group,
+            message_id=1571,
+            text=msg,
+            parse_mode=telegram.ParseMode.HTML,
+            disable_web_page_preview=True
+        )
+    except:
+        pass
+
+
+def scheduler():
+    schedule.every().day.at("04:00").do(clearmem)
+    print("Task scheduled")
+    clearmem()
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+
 if __name__ == "__main__":
+    thread = threading.Thread(target=scheduler, daemon=True)
+    thread.start()
     app.run(host='0.0.0.0', port=80, threaded=True, debug=True)
